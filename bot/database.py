@@ -1,7 +1,7 @@
 from motor.motor_asyncio import AsyncIOMotorClient
 import os
 
-MONGO_URL = os.environ.get("MONGO_URL", "mongodb+srv://your_mongodb_url")
+MONGO_URL = os.environ.get("MONGO_URL", "mongodb+srv://Anime:Anime@anime.suydbfe.mongodb.net/?retryWrites=true&w=majority&appName=Anime")
 
 client = AsyncIOMotorClient(MONGO_URL)
 dbase = client.anime_lord_bot
