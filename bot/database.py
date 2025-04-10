@@ -1,15 +1,31 @@
-from pymongo import MongoClient
-from config.config import MONGO_DB_URI
+from motor.motor_asyncio import AsyncIOMotorClient
+import os
 
-client = MongoClient(MONGO_DB_URI)
-db = client.anime_lord
+MONGO_URL = os.environ.get("MONGO_URL", "mongodb+srv://your_mongodb_url")
 
+client = AsyncIOMotorClient(MONGO_URL)
+dbase = client.anime_lord_bot
+buttons_collection = dbase.buttons
+
+# Initialize DB
 def init_db():
-    db.users.create_index("user_id", unique=True)
+    pass  # MongoDB does not need explicit init
 
-def add_user(user_id: int):
-    if not db.users.find_one({"user_id": user_id}):
-        db.users.insert_one({"user_id": user_id})
+# Add a button
+async def add_button(name: str, url: str):
+    await buttons_collection.update_one(
+        {"name": name},
+        {"$set": {"name": name, "url": url}},
+        upsert=True
+    )
 
-def total_users():
-    return db.users.count_documents({})
+# Remove a button
+async def remove_button(name: str):
+    await buttons_collection.delete_one({"name": name})
+
+# Get all buttons as InlineKeyboard format
+async def get_buttons():
+    buttons = []
+    async for button in buttons_collection.find({}):
+        buttons.append([button["name"], button["url"]])
+    return [[dict(text=name, url=url)] for name, url in buttons]
