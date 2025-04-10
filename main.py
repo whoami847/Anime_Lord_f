@@ -1,5 +1,5 @@
 from pyrogram import Client
-from config.config import API_ID, API_HASH, BOT_TOKEN
+from bot.config import API_ID, API_HASH, BOT_TOKEN
 from bot.all_features import *
 from bot.database import init_db
 from server import app as flask_app
