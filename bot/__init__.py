@@ -1,1 +1,2 @@
-# Empty init file
+from .config import Config
+from .database import db
